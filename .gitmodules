@@ -1,0 +1,6 @@
+[submodule "libraries/doctest"]
+	path = libraries/doctest
+	url = https://github.com/onqtam/doctest.git
+[submodule "libraries/fmt"]
+	path = libraries/fmt
+	url = https://github.com/fmtlib/fmt.git
