@@ -1,17 +1,15 @@
-﻿# CMakeList.txt : CMake project for network packet, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿project (Network_Packet)
 
-
-# Includes
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/../includes
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../libraries
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Includes
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Libraries
 )
 
+file(GLOB_RECURSE SOURCE "*.cpp")
 
-# Add source to this project's executable.
-add_executable (CMakeTarget "main.cpp")
+add_executable (${PROJECT_NAME} ${SOURCE})
 
-# TODO: Add tests and install targets if needed.
+
+target_link_libraries(${PROJECT_NAME}
+    fmt::fmt
+)
