@@ -4,3 +4,6 @@
 [submodule "libraries/fmt"]
 	path = libraries/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "libraries/FTXUI"]
+	path = libraries/FTXUI
+	url = https://github.com/ArthurSonzogni/FTXUI.git
