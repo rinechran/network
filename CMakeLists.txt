@@ -7,8 +7,11 @@ project ("network packet")
 
 set(CMAKE_CXX_STANDARD 17)
 
+
+
 include_directories(includes)
-include_directories(Libraries/doctest/doctest)
+include_directories (libraries/fmt/include)
+include_directories(libraries/doctest/doctest)
 
 # Include sub-projects
 add_subdirectory (libraries/fmt)
@@ -17,5 +20,4 @@ add_subdirectory (libraries/fmt)
 # Excute project
 add_subdirectory (src)
 
-# unitTests
-add_subdirectory (unitTests)
+

@@ -1,8 +1,26 @@
-﻿// network packet.cpp : Defines the entry point for the application.
-//
+﻿#include <kasio/kasio.h>
+#include <fmt/color.h>
 
-#include <fmt/core.h>
 
+class PacketCapture {
+public:
+    PacketCapture() : socket(ioService) {
+
+    }
+
+    void run() {
+
+
+    }
+    kasio::io_service ioService;
+    kasio::basic_socket<kasio::ip::raw> socket;
+};
 int main() {
-	fmt::print("Hello, wor11ld!\n");
+    
+
+    PacketCapture packetCapture;
+    packetCapture.run();
+
+
+
 }

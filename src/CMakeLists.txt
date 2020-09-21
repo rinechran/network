@@ -1,11 +1,11 @@
 ﻿project (Network_Packet)
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Includes
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../Libraries
+    ${CMAKE_CURRENT_SOURCE_DIR}/../includes
+    ${CMAKE_CURRENT_SOURCE_DIR}/../libraries
 )
 
-file(GLOB_RECURSE SOURCE "*.cpp")
+file(GLOB_RECURSE SOURCE "*.cpp" "*.hpp")
 
 add_executable (${PROJECT_NAME} ${SOURCE})
 
