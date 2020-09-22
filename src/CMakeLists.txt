@@ -1,5 +1,7 @@
 ﻿project (Network_Packet)
 
+set(CMAKE_CXX_FLAGS -pthread)
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../includes
     ${CMAKE_CURRENT_SOURCE_DIR}/../libraries

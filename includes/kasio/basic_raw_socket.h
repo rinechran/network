@@ -13,17 +13,13 @@ namespace kasio {
 	template<typename  T>
 	class basic_socket {
 	public:
-		basic_socket(io_service &io) {
-			m_io_serivce = io;
+		basic_socket() {
 		}
 
 		bool open() {
 			 return m_Ip.open();
 		}
 		
-		void test() {
-
-		}
 
 		io_service m_io;
 		

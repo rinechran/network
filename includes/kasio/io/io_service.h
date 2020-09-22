@@ -7,6 +7,9 @@ namespace kasio {
 		void run() {
 
 		}
+		void receve() {
+
+		}
 	};
 }
 #endif

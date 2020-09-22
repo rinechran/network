@@ -14,7 +14,7 @@ namespace kasio {
 			using Socket_t = int;
 
 			Socket_t open() {
-				m_socket =  socket(AF_PACKET, SOCK_DCCP, htons(ETH_P_ALL));
+				m_socket =  socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
 				if (m_socket < 0) {
 					return false;
 				}
