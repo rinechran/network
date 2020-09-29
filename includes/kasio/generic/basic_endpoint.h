@@ -11,7 +11,6 @@ namespace kasio {
 		}
 		std::string ip;
 		
-		
 	};
 
 }

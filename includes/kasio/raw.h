@@ -1,14 +1,14 @@
 #ifndef NETWORK_IP_SOCKET_CPP
 #define NETWORK_IP_SOCKET_CPP
-
+#include<vector>
 #include<netinet/ip.h>
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include<kasio/io/io_service.h>
 #include<netinet/if_ether.h>  
-
 namespace kasio {
 	namespace ip {
+
 		class raw {
 		public:
 			using Socket_t = int;
@@ -20,8 +20,11 @@ namespace kasio {
 				}
 				return true;
 			}
-			void recvfrom() {
-
+			std::vector<char> recv() {
+				std::vector<char> buffer(65555);
+				int packet_size = recvfrom(m_socket, buffer.begin(), buffer.size(), 0, NULL, NULL);
+				buffer.resize(packet_size);
+				return std::move(buffer);
 			}
 			Socket_t m_socket;
 

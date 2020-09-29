@@ -20,8 +20,8 @@ namespace kasio {
 			 return m_Ip.open();
 		}
 
-		std::string recvfrom() {
-			return "asd";
+		std::vector<char> recv() {
+			return std::move(m_Ip.recv());
 		}
 		
 

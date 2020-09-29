@@ -59,7 +59,9 @@ public:
         m_runing = true;
 
         while (isRunning()) {
-            std::cout << m_packetStrategy->recv() << std::endl;
+            auto i = m_socket.recv();
+            std::string str(i.begin(), i.end());
+            std::cout << str << std::endl;
         }
         return CODE::EXIT;
     }
