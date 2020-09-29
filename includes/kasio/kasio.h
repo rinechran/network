@@ -3,6 +3,6 @@
 
 #include <kasio/generic/basic_endpoint.h>
 #include <kasio/io/io_service.h>
-#include <kasio/basic_raw_socket.h>
+#include <kasio/basic_socket.h>
 #include <kasio/raw.h>
 #endif

@@ -54,7 +54,7 @@ public:
     }
     CODE impleRun() {
         if (m_socket.open()==false) {
-            throw std::runtime_error("Scoket Error");
+            throw std::runtime_error("Socket Error");
         }
         m_runing = true;
 

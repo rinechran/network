@@ -3,7 +3,7 @@
 #include <future>
 #include <thread>
 #include <PCN/type.h>
-#include <PCN/networkcapture.h>
+#include <PCN/networkCapture.h>
 
 
 

@@ -20,7 +20,11 @@ namespace kasio {
 				}
 				return true;
 			}
+			void recvfrom() {
+
+			}
 			Socket_t m_socket;
+
 		};
 	}
 }

@@ -1,5 +1,5 @@
-#ifndef KASIO_BASIC_RAW_SOCKET
-#define KASIO_BASIC_RAW_SOCKET
+#ifndef KASIO_BASIC_SOCKET
+#define KASIO_BASIC_SOCKET
 
 
 #include<netinet/ip.h>
@@ -18,6 +18,10 @@ namespace kasio {
 
 		bool open() {
 			 return m_Ip.open();
+		}
+
+		std::string recvfrom() {
+			return "asd";
 		}
 		
 
