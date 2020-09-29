@@ -5,4 +5,5 @@
 #include <kasio/io/io_service.h>
 #include <kasio/basic_socket.h>
 #include <kasio/raw.h>
+#include <kasio/generic/protocal_type.h>
 #endif

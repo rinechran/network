@@ -5,15 +5,19 @@
 #include <kasio/kasio.h>
 #include <string>
 #include <future>
+#include <memory>
 #include <thread>
+#include <fmt/core.h>
 class PacketCapture;
+
+
 class PacketStrategy {
 public:
     PacketStrategy(PacketCapture* other) : m_packetCapture(other){
     }
 
     PacketCapture * m_packetCapture;
-    virtual std::string recv() = 0;
+    virtual void recv(std::vector<char> &data) = 0;
 };
 
 class PacketAllStrategy : public PacketStrategy {
@@ -21,9 +25,18 @@ public:
     PacketAllStrategy(PacketCapture* other) : PacketStrategy(other) {
 
     }
-    virtual std::string recv() override {
-        sleep(1);
-        return "w";
+    virtual void recv(std::vector<char>& data) override {
+
+        kasio::Ethhdr * eth = (kasio::Ethhdr*)(&(data[0]));
+        fmt::print("Ethernet Header\n");
+        fmt::print("\tSource Address {:x}:{:x}:{:x}:{:x}:{:x}:{:x}\n"
+            , eth->h_source[0], eth->h_source[1], eth->h_source[2]
+            , eth->h_source[3], eth->h_source[4], eth->h_source[5]);
+        fmt::print("\tDestination Address {:x}:{:x}:{:x}:{:x}:{:x}:{:x}\n"
+            , eth->h_dest[0], eth->h_dest[1], eth->h_dest[2]
+            , eth->h_dest[3], eth->h_dest[4], eth->h_dest[5]);
+        fmt::print("\tprotocal {}\n"
+            , (int16_t)eth->type);
     }
 
 };
@@ -33,9 +46,8 @@ public:
     PacketTCPStrategy(PacketCapture* other) : PacketStrategy(other) {
 
     }
-    virtual std::string recv() override {
+    virtual void recv(std::vector<char>& data) override {
         sleep(1);
-        return "tcp";
     }
 
 };
@@ -43,7 +55,7 @@ public:
 class PacketCapture {
 public:
     PacketCapture() : m_runing(false) {
-        m_packetStrategy =  new PacketAllStrategy(this);
+        m_packetStrategy.reset(new PacketAllStrategy(this));
     }
     enum CODE {
         EXIT, ERROR
@@ -59,9 +71,8 @@ public:
         m_runing = true;
 
         while (isRunning()) {
-            auto i = m_socket.recv();
-            std::string str(i.begin(), i.end());
-            std::cout << str << std::endl;
+            auto data = m_socket.recv();
+            m_packetStrategy->recv(data);
         }
         return CODE::EXIT;
     }
@@ -75,7 +86,7 @@ public:
 
     }
     void tcp() {
-        m_packetStrategy = new PacketTCPStrategy(this);
+        m_packetStrategy.reset(new PacketTCPStrategy(this));
     }
     void changeStrategy() {
 
@@ -83,7 +94,7 @@ public:
     bool isRunning() {
         return m_runing;
     }
-    PacketStrategy* m_packetStrategy;
+    std::shared_ptr<PacketStrategy> m_packetStrategy;
     bool m_runing;
     kasio::basic_socket<kasio::ip::raw> m_socket;
     
