@@ -28,6 +28,9 @@ public:
 
             switch (PCN::STATE_MENT[input])
             {
+            case PCN::INPUT_TYPE::ETHHDR:
+                packetcapture.ethhdr();
+                break;
             case PCN::INPUT_TYPE::HTTPS:
                 break;
             case PCN::INPUT_TYPE::HTTP:
@@ -36,6 +39,7 @@ public:
                 packetcapture.tcp();
                 break;
             case PCN::INPUT_TYPE::STOP:
+                packetcapture.stop();
                 break;
             case PCN::INPUT_TYPE::EXIT:
                 packetcapture.exit();

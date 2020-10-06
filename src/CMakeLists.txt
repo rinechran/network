@@ -9,7 +9,7 @@ include_directories(
 
 file(GLOB_RECURSE SOURCE "*.cpp" "*.hpp")
 
-add_executable (${PROJECT_NAME} ${SOURCE})
+add_executable (${PROJECT_NAME} ${SOURCE} )
 
 
 target_link_libraries(${PROJECT_NAME}

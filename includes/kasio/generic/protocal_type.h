@@ -14,5 +14,23 @@ namespace kasio {
 		std::int16_t	type;
 	}  __attribute__((packed));
 
+	struct Iphdr {
+        unsigned char ihl : 4;
+        unsigned char version : 4;
+
+        unsigned char tos;
+        unsigned int tot_len;
+        unsigned int id;
+        unsigned char ttl;
+        unsigned char protocol;
+        unsigned int check;
+
+        __u32  saddr;
+        __u32  daddr;
+
+    } __attribute__((packed));
+
+
 }
+
 #endif
