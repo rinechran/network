@@ -82,7 +82,7 @@ namespace kasio {
                 u_int16_t	mtu;
             } frag;			/* path mtu discovery */
         } un;
-    };
+    }  __attribute__((packed)) ;
 
 
 

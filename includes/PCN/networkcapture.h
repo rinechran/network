@@ -128,7 +128,9 @@ public:
         while (isRunning()) {
             PCN::Packet data = m_socket.recv();
             m_packetStrategy->recv(data);
+            Packet.push_back(data);
         }
+
         return CODE::EXIT;
     }
 

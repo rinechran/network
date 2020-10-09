@@ -35,6 +35,18 @@ namespace PCN {
             }
 
         }
+        Packet(const Packet& packet) {
+            TransportPacket = packet.TransportPacket;
+            if (packet.ethhder != nullptr) {
+                ethhder = new kasio::Ethhdr();
+                memcpy(ethhder, packet.ethhder, sizeof(kasio::Ethhdr));
+            }
+            if (packet.iphdr != nullptr) {
+                iphdr = new kasio::Iphdr();
+                memcpy(iphdr, packet.iphdr, sizeof(kasio::Iphdr));
+            }
+        }
+        Packet operator=(Packet) = delete;
         
         IP_TYPE GetIpProtocalType() {
             if (iphdr == nullptr) {
@@ -52,6 +64,7 @@ namespace PCN {
                 delete iphdr;
 
         }
+
 
         std::vector<char> TransportPacket;
         kasio::Ethhdr* ethhder;
