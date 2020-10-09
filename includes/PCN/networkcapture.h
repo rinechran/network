@@ -1,4 +1,4 @@
-#ifndef PCM_NETWORK_CAPTURE
+﻿#ifndef PCM_NETWORK_CAPTURE
 #define PCM_NETWORK_CAPTURE
 
 #include <unistd.h>
@@ -6,7 +6,10 @@
 #include <string>
 #include <future>
 #include <memory>
+#include <fmt/core.h>
 #include <thread>
+#include <PCN/type.h>
+
 class PacketCapture;
 
 
@@ -17,13 +20,13 @@ public:
     }
 
     PacketCapture * m_packetCapture;
-    virtual void recv(std::vector<char> &data) = 0;
+    virtual void recv(PCN::Packet&data) = 0;
 };
 
 class PacketStopComponent : public Component {
 public:
     PacketStopComponent(PacketCapture* other);
-    virtual void recv(std::vector<char>& data) override {
+    virtual void recv(PCN::Packet& data) override {
     }
 };
 
@@ -33,7 +36,7 @@ public:
 
     }
 public:
-    virtual void recv(std::vector<char>& data) override;
+    virtual void recv(PCN::Packet& data) override;
 
 };
 
@@ -43,10 +46,20 @@ public:
 
     }
 public:
-    virtual void recv(std::vector<char>& data) override {
-        PacketEthhdrComponent::recv(data);
+    virtual void recv(PCN::Packet& data) override {
 
-        fmt::print("");
+        kasio::Iphdr * ip = data.iphdr;
+        if (ip == nullptr) {
+            return;
+        }
+        fmt::print("Version : {}\n", (unsigned int)ip->version);
+        fmt::print("\tType Of Service : {}\n", (unsigned int)ip->tos);
+        fmt::print("\tTotal Length : {}\n", (unsigned int)ip->tot_len);
+        fmt::print("\tTime To Live: {}\n", (unsigned int)ip->ttl);
+        fmt::print("\tProtocol : {}\n", (unsigned int)ip->protocol);
+        fmt::print("\tHeader Checksum: {}\n", (unsigned int)ip->check);
+        fmt::print("\tSource IP: {}\n", (unsigned int)ip->saddr);
+        fmt::print("\tDestination IP: {}\n", (unsigned int)ip->daddr);
 
     }
 
@@ -56,7 +69,7 @@ public:
     PacketTcpComponent(PacketCapture* other) : PacketIPComponent(other) {
 
     }
-    virtual void recv(std::vector<char>& data) override {
+    virtual void recv(PCN::Packet& data) override {
         sleep(1);
     }
 
@@ -66,7 +79,7 @@ public:
     PacketAllComponent(PacketCapture* other) : Component(other) {
 
     }
-    virtual void recv(std::vector<char>& data) override {
+    virtual void recv(PCN::Packet& data) override {
 
 
     }
@@ -93,7 +106,7 @@ public:
         m_runing = true;
 
         while (isRunning()) {
-            auto data = m_socket.recv();
+            PCN::Packet data = m_socket.recv();
             m_packetStrategy->recv(data);
         }
         return CODE::EXIT;
@@ -112,13 +125,17 @@ public:
     void tcp() {
         m_packetStrategy.reset(new PacketTcpComponent(this));
     }
-    void changeStrategy() {
+    void ip() {
+        m_packetStrategy.reset(new PacketIPComponent(this));
 
     }
+
     bool isRunning() {
         return m_runing;
     }
+private:
     std::shared_ptr<Component> m_packetStrategy;
+    std::vector<PCN::Packet> httpPackets;
     bool m_runing;
     kasio::basic_socket<kasio::ip::raw> m_socket;
     

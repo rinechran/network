@@ -26,7 +26,7 @@ namespace kasio {
 				std::vector<char> buffer(65555);
 				int packet_size = recvfrom(m_socket, &(buffer[0]), buffer.size(), 0, NULL, NULL);
 				buffer.resize(packet_size);
-				return std::move(buffer);
+				return buffer;
 
 			}
 			Socket_t m_socket;

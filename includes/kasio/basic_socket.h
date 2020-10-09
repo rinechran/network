@@ -7,6 +7,7 @@
 #include<arpa/inet.h>
 #include<kasio/io/io_service.h>
 #include<kasio/raw.h>
+#include<kasio/generic/protocal_type.h>
 
 namespace kasio {
 
@@ -21,7 +22,7 @@ namespace kasio {
 		}
 
 		std::vector<char> recv() {
-			return std::move(m_Ip.recv());
+			return m_Ip.recv();
 		}
 		
 

@@ -2,8 +2,9 @@
 #include <string>
 #include <future>
 #include <thread>
+#include <PCN/networkcapture.h>
 #include <PCN/type.h>
-#include <PCN/networkCapture.h>
+#include <PCN/constant.h>
 
 
 
@@ -41,6 +42,9 @@ public:
             case PCN::INPUT_TYPE::STOP:
                 packetcapture.stop();
                 break;
+            case PCN::INPUT_TYPE::IP:
+                packetcapture.ip();
+                break;
             case PCN::INPUT_TYPE::EXIT:
                 packetcapture.exit();
                 goto EXIT;
@@ -49,6 +53,7 @@ public:
                 break;
             }
         }
+
         EXIT:
         auto result = packeteCatureEnable.get();
 

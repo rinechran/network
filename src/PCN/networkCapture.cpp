@@ -1,4 +1,4 @@
-#include <PCN/networkCapture.h>
+#include <PCN/networkcapture.h>
 #include <fmt/core.h>
 
 
@@ -6,8 +6,8 @@ PacketStopComponent::PacketStopComponent(PacketCapture* other) : Component(other
 
 }
 
-void PacketEthhdrComponent::recv(std::vector<char>& data)  {
-    kasio::Ethhdr* eth = (kasio::Ethhdr*)(&(data[0]));
+void PacketEthhdrComponent::recv(PCN::Packet& data)  {
+    kasio::Ethhdr* eth = data.ethhder;
     fmt::print("Ethernet Header\n");
     fmt::print("\tSource Address {:x}:{:x}:{:x}:{:x}:{:x}:{:x}\n"
         , eth->h_source[0], eth->h_source[1], eth->h_source[2]
