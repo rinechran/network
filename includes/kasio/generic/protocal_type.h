@@ -21,14 +21,17 @@ namespace kasio {
         unsigned char version : 4;
 
         unsigned char tos;
-        unsigned int tot_len;
-        unsigned int id;
+        unsigned short tot_len;
+
+        unsigned short id;
+        unsigned char flags : 3;
+        unsigned short fragmentOffset : 13;
+
         unsigned char ttl;
         unsigned char protocol;
         unsigned int check;
-
-        __u32  saddr;
-        __u32  daddr;
+        unsigned int  saddr;
+        unsigned int  daddr;
 
     } __attribute__((packed));
 

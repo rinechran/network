@@ -20,7 +20,18 @@ namespace PCN {
 
             if (ipRequireMinSize <= packet.size()) {
                 iphdr = new kasio::Iphdr();
-                memcpy(&(*iphdr), &(packet[sizeof(kasio::Ethhdr)]), sizeof(kasio::Ethhdr));
+                memcpy(&(*iphdr), &(packet[sizeof(kasio::Ethhdr)]), sizeof(kasio::Iphdr));
+
+                switch (iphdr->protocol)
+                {
+                case 6://TCP
+                    break;
+                case 0x11://UDP
+                    break;
+                default:
+                    break;
+                }
+                
             }
 
 
