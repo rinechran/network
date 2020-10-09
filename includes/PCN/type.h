@@ -6,10 +6,16 @@
 #include <kasio/generic/protocal_type.h>
 
 namespace PCN {
+
+    enum class IP_TYPE  {
+        UNKNOW = -1,
+        ICMP = 1 ,
+        TCP = 6,
+        UDP = 11
+    };
     class Packet {
     public:
         Packet(std::vector<char> packet) {
-            this->raw_packet = packet;
 
             ethhder = new kasio::Ethhdr();
             iphdr = nullptr;
@@ -20,29 +26,37 @@ namespace PCN {
 
             if (ipRequireMinSize <= packet.size()) {
                 iphdr = new kasio::Iphdr();
-                memcpy(&(*iphdr), &(packet[sizeof(kasio::Ethhdr)]), sizeof(kasio::Iphdr));
-
-                switch (iphdr->protocol)
-                {
-                case 6://TCP
-                    break;
-                case 0x11://UDP
-                    break;
-                default:
-                    break;
-                }
+                memcpy(&(*iphdr), &(packet[sizeof(kasio::Ethhdr)]), sizeof(kasio::Iphdr));                
                 
+                auto transportIndex = ipRequireMinSize;
+                TransportPacket = std::move(std::vector<char>(
+                    packet.begin() + transportIndex,
+                    packet.end()));
             }
 
-
-
-
+        }
+        
+        IP_TYPE GetIpProtocalType() {
+            if (iphdr == nullptr) {
+                return IP_TYPE::UNKNOW;
+            }
+            return (IP_TYPE)iphdr->protocol;
+        }
+        std::vector<char>& GetTransportPacket() {
+            return TransportPacket;
+        }
+        ~Packet() {
+            if (ethhder != nullptr)
+                delete ethhder;
+            if (iphdr != nullptr)
+                delete iphdr;
 
         }
-        std::vector<char> raw_packet;
+
+        std::vector<char> TransportPacket;
         kasio::Ethhdr* ethhder;
         kasio::Iphdr* iphdr;
-
+        IP_TYPE iptype;
     };
 }
 

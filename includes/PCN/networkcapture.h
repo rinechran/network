@@ -64,6 +64,26 @@ public:
     }
 
 };
+class PacketIcmPComponent : public PacketIPComponent {
+public:
+    PacketIcmPComponent(PacketCapture* other) : PacketIPComponent(other) {
+
+    }
+    virtual void recv(PCN::Packet& data) override {
+
+        if (data.GetIpProtocalType() != PCN::IP_TYPE::ICMP) {
+            return;
+        }
+
+        kasio::Icmphdr icmphdr;
+        memcpy(&icmphdr, &(data.GetTransportPacket()), sizeof(kasio::Icmphdr));
+
+        fmt::print("\ttype : {}\n", (unsigned int)icmphdr.type);
+        fmt::print("\tCode: {}\n", (unsigned int)icmphdr.code);
+        fmt::print("\tCheck Sum: {}\n", (unsigned int)icmphdr.checksum);
+
+    }
+};
 class PacketTcpComponent : public PacketIPComponent {
 public:
     PacketTcpComponent(PacketCapture* other) : PacketIPComponent(other) {
@@ -127,15 +147,19 @@ public:
     }
     void ip() {
         m_packetStrategy.reset(new PacketIPComponent(this));
-
     }
-
+    void icmp() {
+        m_packetStrategy.reset(new PacketIcmPComponent(this));
+    }
+    void clear() {
+        Packet.clear();
+    }
     bool isRunning() {
         return m_runing;
     }
 private:
     std::shared_ptr<Component> m_packetStrategy;
-    std::vector<PCN::Packet> httpPackets;
+    std::vector<PCN::Packet> Packet;
     bool m_runing;
     kasio::basic_socket<kasio::ip::raw> m_socket;
     

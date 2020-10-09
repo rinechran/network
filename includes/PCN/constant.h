@@ -6,7 +6,7 @@
 #include <kasio/generic/protocal_type.h>
 
 namespace PCN {
-    enum INPUT_TYPE { HTTPS, HTTP, TCP, UDP, IMCP, STOP, EXIT, ALL, ETHHDR, IP };
+    enum class INPUT_TYPE { HTTPS, HTTP, TCP, UDP, IMCP, STOP, EXIT, ALL, ETHHDR, IP , ICMP};
 
     std::unordered_map<std::string, INPUT_TYPE>  STATE_MENT({
         {"https", INPUT_TYPE::HTTPS},
@@ -17,7 +17,8 @@ namespace PCN {
         {"exit", INPUT_TYPE::EXIT},
         {"start", INPUT_TYPE::ALL},
         {"ethhdr",INPUT_TYPE::ETHHDR},
-        {"ip",INPUT_TYPE::IP}
+        {"ip",INPUT_TYPE::IP},
+        {"icmp",INPUT_TYPE::ICMP}
         });
 
 }

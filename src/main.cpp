@@ -3,9 +3,7 @@
 #include <future>
 #include <thread>
 #include <PCN/networkcapture.h>
-#include <PCN/type.h>
 #include <PCN/constant.h>
-
 
 
 class Application {
@@ -29,6 +27,9 @@ public:
 
             switch (PCN::STATE_MENT[input])
             {
+            case PCN::INPUT_TYPE::ICMP:
+                packetcapture.icmp();
+                break;
             case PCN::INPUT_TYPE::ETHHDR:
                 packetcapture.ethhdr();
                 break;
