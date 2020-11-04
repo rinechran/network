@@ -1,0 +1,19 @@
+@startuml
+actor User 
+
+entity Application
+control PacketCapture
+database pacpFIle
+
+
+Application -> pacpFIle : FIle Read 
+
+loop infinite
+    User -> Application : User Input
+
+    Application -> PacketCapture : UserInputer 
+    PacketCapture -> User : ViewData Out
+end
+
+
+@enduml
