@@ -1,0 +1,20 @@
+@startuml
+
+actor User 
+
+entity Application
+control PacketCapture
+collections OS
+
+note left PacketCapture : PacketCapture Thread Start
+PacketCapture -> OS : NetWOrk Packet Initalize
+
+loop infinite
+    User -> Application : User Input
+    OS -> PacketCapture : NetWOrk Packet Data
+
+    Application -> PacketCapture : UserInputer 
+    PacketCapture -> User : ViewData Out
+end
+
+@enduml
