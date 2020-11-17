@@ -40,6 +40,9 @@ public:
             case PCN::INPUT_TYPE::TCP:
                 packetcapture.tcp();
                 break;
+            case PCN::INPUT_TYPE::UDP:
+                packetcapture.udp();
+                break;
             case PCN::INPUT_TYPE::STOP:
                 packetcapture.stop();
                 break;

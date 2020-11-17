@@ -18,7 +18,8 @@ namespace PCN {
         {"start", INPUT_TYPE::ALL},
         {"ethhdr",INPUT_TYPE::ETHHDR},
         {"ip",INPUT_TYPE::IP},
-        {"icmp",INPUT_TYPE::ICMP}
+        {"icmp",INPUT_TYPE::ICMP},
+        {"udp",INPUT_TYPE::UDP}
         });
 
 }

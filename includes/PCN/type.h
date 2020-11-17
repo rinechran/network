@@ -28,7 +28,30 @@ namespace PCN {
                 iphdr = new kasio::Iphdr();
                 memcpy(&(*iphdr), &(packet[sizeof(kasio::Ethhdr)]), sizeof(kasio::Iphdr));                
                 
+                iptype = static_cast<IP_TYPE>(iphdr->protocol);
                 auto transportIndex = ipRequireMinSize;
+
+                if (iptype == IP_TYPE::TCP) {
+
+                }
+                switch (iptype)
+                {
+                case IP_TYPE::TCP:
+                    tcpdr = new kasio::tcphdr();
+                    memcpy(&(*iphdr), &(packet[transportIndex]), sizeof(kasio::tcphdr));
+
+                    std::move(std::vector<char>(
+                        packet.begin() + transportIndex,
+                        packet.end()));
+
+
+                    break;
+                case IP_TYPE::UDP:
+
+                default:
+                    break;
+                }
+
                 TransportPacket = std::move(std::vector<char>(
                     packet.begin() + transportIndex,
                     packet.end()));
@@ -69,6 +92,9 @@ namespace PCN {
         std::vector<char> TransportPacket;
         kasio::Ethhdr* ethhder;
         kasio::Iphdr* iphdr;
+        kasio::tcphdr* tcpdr;
+        kasio::udphdr* udpdr;
+
         IP_TYPE iptype;
     };
 }

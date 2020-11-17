@@ -90,10 +90,32 @@ public:
 
     }
     virtual void recv(PCN::Packet& data) override {
-        sleep(1);
+        
+        if (data.iptype==PCN::IP_TYPE::TCP) {
+            for (char &data : data.TransportPacket) {
+                fmt::print("{}", data);
+            }
+        }
     }
-
 };
+
+
+class PacketUdpComponent : public PacketIPComponent {
+public:
+    PacketUdpComponent(PacketCapture* other) : PacketIPComponent(other) {
+
+    }
+    virtual void recv(PCN::Packet& data) override {
+
+        if (data.iptype == PCN::IP_TYPE::UDP) {
+            for (char& data : data.TransportPacket) {
+                fmt::print("{}", data);
+            }
+        }
+    }
+};
+
+
 class PacketAllComponent : public Component {
 public:
     PacketAllComponent(PacketCapture* other) : Component(other) {
@@ -152,6 +174,9 @@ public:
     }
     void icmp() {
         m_packetStrategy.reset(new PacketIcmPComponent(this));
+    }
+    void udp() {
+        m_packetStrategy.reset(new PacketUdpComponent(this));
     }
     void clear() {
         Packet.clear();

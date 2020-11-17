@@ -57,16 +57,16 @@ namespace kasio {
         __u16   urg_ptr;
     } __attribute__((packed));
     struct udphdr {
-        u_short	uh_sport;		/* source port */
-        u_short	uh_dport;		/* destination port */
-        short	uh_ulen;		/* udp length */
-        u_short	uh_sum;			/* udp checksum */
+        u_short	uh_sport;		
+        u_short	uh_dport;		
+        short	uh_ulen;		
+        u_short	uh_sum;			
     } __attribute__((packed)) ;
 
     struct Icmphdr
     {
-        u_int8_t type;		/* message type */
-        u_int8_t code;		/* type sub-code */
+        u_int8_t type;		
+        u_int8_t code;		
         u_int16_t checksum;
         union
         {
@@ -74,13 +74,13 @@ namespace kasio {
             {
                 u_int16_t	id;
                 u_int16_t	sequence;
-            } echo;			/* echo datagram */
-            u_int32_t	gateway;	/* gateway address */
+            } echo;			
+            u_int32_t	gateway;	
             struct
             {
                 u_int16_t	__unused;
                 u_int16_t	mtu;
-            } frag;			/* path mtu discovery */
+            } frag;			
         } un;
     }  __attribute__((packed)) ;
 
