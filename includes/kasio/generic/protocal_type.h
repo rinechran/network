@@ -17,21 +17,20 @@ namespace kasio {
 	}  __attribute__((packed));
 
 	struct Iphdr {
-        unsigned char ihl : 4;
-        unsigned char version : 4;
+        unsigned char ihl : 4 , version: 4;
 
         unsigned char tos;
-        unsigned short tot_len;
 
+        unsigned short tot_len;
         unsigned short id;
-        unsigned char flags : 3;
-        unsigned short fragmentOffset : 13;
+        unsigned short flags;
 
         unsigned char ttl;
         unsigned char protocol;
-        unsigned int check;
-        unsigned int  saddr;
-        unsigned int  daddr;
+        unsigned short check;
+
+        unsigned char  saddr[4];
+        unsigned char  daddr[4];
 
     } __attribute__((packed));
 
@@ -41,16 +40,17 @@ namespace kasio {
         __u32   seq;
         __u32   ack_seq;
 
-        __u16   res1 : 4,
-            doff : 4,
-            fin : 1,
-            syn : 1,
-            rst : 1,
-            psh : 1,
-            ack : 1,
-            urg : 1,
-            ece : 1,
-            cwr : 1;
+        
+        unsigned char dataOffset :4 ,reserved :3 ,ns : 1;;
+
+        unsigned char cwr : 1
+            , ece : 1
+            , urg : 1
+            , ack : 1
+            , psh : 1
+            , rst : 1
+            , syn : 1
+            , fln : 1;
 
         __u16   window;
         __u16   check;
@@ -59,8 +59,8 @@ namespace kasio {
     struct udphdr {
         u_short	uh_sport;		
         u_short	uh_dport;		
-        short	uh_ulen;		
-        u_short	uh_sum;			
+        u_short	uh_ulen;
+        u_short	uh_sum;
     } __attribute__((packed)) ;
 
     struct Icmphdr
@@ -83,10 +83,6 @@ namespace kasio {
             } frag;			
         } un;
     }  __attribute__((packed)) ;
-
-
-
-
 
 
 }

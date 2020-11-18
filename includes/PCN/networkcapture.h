@@ -58,8 +58,8 @@ public:
         fmt::print("\tTime To Live: {}\n", (unsigned int)ip->ttl);
         fmt::print("\tProtocol : {}\n", (unsigned int)ip->protocol);
         fmt::print("\tHeader Checksum: {}\n", (unsigned int)ip->check);
-        fmt::print("\tSource IP: {}\n", (unsigned int)ip->saddr);
-        fmt::print("\tDestination IP: {}\n", (unsigned int)ip->daddr);
+        fmt::print("\tSource IP: {}.{}.{}.{}\n", ip->saddr[0], ip->saddr[1], ip->saddr[2], ip->saddr[3]);
+        fmt::print("\tDestination IP: {}.{}.{}.{}\n", ip->daddr[0], ip->daddr[1], ip->daddr[2], ip->daddr[3]);
 
     }
 
@@ -93,8 +93,31 @@ public:
         
         if (data.iptype==PCN::IP_TYPE::TCP) {
             for (char &data : data.TransportPacket) {
+
                 fmt::print("{}", data);
             }
+            fmt::print("\n");
+        }
+    }
+};
+
+class PacketHttpComponent : public PacketTcpComponent {
+public:
+    PacketHttpComponent(PacketCapture* other) : PacketTcpComponent(other) {
+
+    }
+    virtual void recv(PCN::Packet& data) override {
+
+        if (data.iptype == PCN::IP_TYPE::TCP && 
+            (ntohs(data.tcpdr->source) == 80 || ntohs(data.tcpdr->dest) == 80)) {
+
+
+            for (char& data : data.TransportPacket) {
+
+                fmt::print("{}", data);
+            }
+            fmt::print("\n");
+
         }
     }
 };
@@ -106,8 +129,9 @@ public:
 
     }
     virtual void recv(PCN::Packet& data) override {
-
+       
         if (data.iptype == PCN::IP_TYPE::UDP) {
+
             for (char& data : data.TransportPacket) {
                 fmt::print("{}", data);
             }
@@ -125,7 +149,6 @@ public:
 
 
     }
-
 };
 
 
@@ -160,6 +183,9 @@ public:
         m_runing = false;
     }
 
+    void http() {
+        m_packetStrategy.reset(new PacketHttpComponent(this));
+    }
     void stop() {
         m_packetStrategy.reset(new PacketStopComponent(this));
     }

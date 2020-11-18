@@ -11,18 +11,16 @@ namespace PCN {
         UNKNOW = -1,
         ICMP = 1 ,
         TCP = 6,
-        UDP = 11
+        UDP = 17
     };
     class Packet {
     public:
-        Packet(std::vector<char> packet) {
+        Packet(std::vector<char> packet)  :iphdr(nullptr), tcpdr(nullptr) , udpdr(nullptr){
 
             ethhder = new kasio::Ethhdr();
-            iphdr = nullptr;
             memcpy(&(*ethhder), &(packet[0]), sizeof(kasio::Ethhdr));
 
-            const int ipRequireMinSize = sizeof(kasio::Ethhdr) + sizeof(kasio::Iphdr);
-
+            const int ipRequireMinSize = sizeof(kasio::Ethhdr) + sizeof(kasio::Iphdr) ;
 
             if (ipRequireMinSize <= packet.size()) {
                 iphdr = new kasio::Iphdr();
@@ -30,34 +28,34 @@ namespace PCN {
                 
                 iptype = static_cast<IP_TYPE>(iphdr->protocol);
 
-                if (iptype == IP_TYPE::TCP) {
-
-                }
                 switch (iptype)
                 {
                 case IP_TYPE::TCP:
+                    {
+                    tcpdr = new kasio::tcphdr();
+
+                    memcpy(&(*tcpdr), &(packet[ipRequireMinSize]), sizeof(kasio::tcphdr));
+
                     auto tcpTransportIndex = ipRequireMinSize + sizeof(kasio::tcphdr);
 
-                    tcpdr = new kasio::tcphdr();
-
-                    memcpy(&(*iphdr), &(packet[tcpTransportIndex]), sizeof(kasio::tcphdr));
-
-                    std::move(std::vector<char>(
+                    TransportPacket = std::move(std::vector<char>(
                         packet.begin() + tcpTransportIndex,
                         packet.end()));
-
+                    }
                     break;
                 case IP_TYPE::UDP:
+                   {
+                    udpdr = new kasio::udphdr();
+
+                    memcpy(&(*udpdr), &(packet[ipRequireMinSize]), sizeof(kasio::udphdr));
+
                     auto udpTransportIndex = ipRequireMinSize + sizeof(kasio::udphdr);
 
-                    tcpdr = new kasio::tcphdr();
-
-                    memcpy(&(*iphdr), &(packet[udpTransportIndex]), sizeof(kasio::udphdr));
-
-                    std::move(std::vector<char>(
+                    TransportPacket = std::move(std::vector<char>(
                         packet.begin() + udpTransportIndex,
                         packet.end()));
-
+                   }   
+                    break;
                 default:
                     break;
                 }
@@ -66,7 +64,10 @@ namespace PCN {
 
         }
         Packet(const Packet& packet) {
-            TransportPacket = packet.TransportPacket;
+            iptype = packet.iptype;
+            iphdr = nullptr;
+            tcpdr = nullptr;
+            udpdr = nullptr;
             if (packet.ethhder != nullptr) {
                 ethhder = new kasio::Ethhdr();
                 memcpy(ethhder, packet.ethhder, sizeof(kasio::Ethhdr));
@@ -74,6 +75,14 @@ namespace PCN {
             if (packet.iphdr != nullptr) {
                 iphdr = new kasio::Iphdr();
                 memcpy(iphdr, packet.iphdr, sizeof(kasio::Iphdr));
+            }
+            if (packet.udpdr != nullptr) {
+                udpdr = new kasio::udphdr();
+                memcpy(udpdr, packet.udpdr, sizeof(kasio::udphdr));
+            }
+            if (packet.tcpdr != nullptr) {
+                tcpdr = new kasio::tcphdr();
+                memcpy(tcpdr, packet.tcpdr, sizeof(kasio::tcphdr));
             }
         }
         Packet operator=(Packet) = delete;
@@ -92,6 +101,10 @@ namespace PCN {
                 delete ethhder;
             if (iphdr != nullptr)
                 delete iphdr;
+            if (udpdr != nullptr)
+                delete udpdr;
+            if (tcpdr != nullptr)
+                delete tcpdr;
 
         }
 
